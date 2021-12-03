@@ -1,0 +1,36 @@
+@url = http://localhost:5127/speakers-module
+@speakerId = 7ba6bd19-22d0-431f-80bc-30c55ca197d8
+###
+GET {{url}}
+
+###
+POST {{url}}/speakers
+Content-Type: application/json
+
+{
+    "firstName":"Test",
+    "lastName":"Testowy",
+    "email":"TestTestowy@email.com",
+    "Bio":"Test string"
+}
+
+###
+GET {{url}}/speakers
+
+###
+GET {{url}}/speakers/{{speakerId}}
+
+###
+PUT {{url}}/speakers/{{speakerId}}
+Content-Type: application/json
+
+{
+    "firstName":"Jan",
+    "lastName":"Testowy",
+    "email":"TestTestowy@email.com",
+    "Bio":"Test string"
+}
+
+###
+DELETE {{url}}/speakers/{{speakerId}}
+Content-Type: application/json
