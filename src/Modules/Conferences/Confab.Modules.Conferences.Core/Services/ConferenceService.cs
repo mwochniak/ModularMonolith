@@ -7,7 +7,6 @@ using Confab.Modules.Conferences.Core.Entities;
 using Confab.Modules.Conferences.Core.Exceptions;
 using Confab.Modules.Conferences.Core.Policies;
 using Confab.Modules.Conferences.Core.Repositories;
-using Microsoft.AspNetCore.Server.IIS.Core;
 
 namespace Confab.Modules.Conferences.Core.Services
 {

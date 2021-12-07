@@ -1,0 +1,35 @@
+@url = http://localhost:5127/users-module
+@email = user1@confab.io
+@password = secret
+@role = user
+@accessToken = secret ### GET {{url}}
+@accessToken2 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkOWM2Yzg3NC0xNGUwLTQyMGMtYjg0OS1kNGI1MTg5YmI4YWIiLCJ1bmlxdWVfbmFtZSI6ImQ5YzZjODc0LTE0ZTAtNDIwYy1iODQ5LWQ0YjUxODliYjhhYiIsImp0aSI6ImExYTc3YjQyLWIzNzUtNDMyYi1hZWI1LTA2MDgxYzFiYjlmYSIsImlhdCI6IjE2Mzg5MDc5NTgxMDIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsiY29uZmVyZW5jZXMiLCJob3N0cyIsInNwZWFrZXJzIiwidGlja2V0cyIsInVzZXJzIl0sIm5iZiI6MTYzODkwNzk1OCwiZXhwIjoxNjM4OTQzOTU4LCJpc3MiOiJjb25mYWIifQ.DmmHN63awwddS_BHH_cdUPRN9CvjsAyCUTFPaLr98q4
+###
+GET {{url}}
+
+### 
+GET {{url}}/account
+Authorization: Bearer {{accessToken2}}
+
+###
+POST {{url}}/account/sign-up
+Content-Type: application/json
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}",
+    "role": "{{role}}",
+    "claims": 
+    {
+        "permissions": ["conferences", "hosts", "speakers", "tickets", "users"]
+    }
+}
+
+### 
+POST {{url}}/account/sign-in 
+Content-Type: application/json
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}"
+}

@@ -1,10 +1,12 @@
 @url = http://localhost:5127/speakers-module
 @speakerId = 7ba6bd19-22d0-431f-80bc-30c55ca197d8
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMmZlM2QwMi1mNGQwLTRmZTQtOTUyOS01YmZkODIzZjk3ZjgiLCJ1bmlxdWVfbmFtZSI6IjEyZmUzZDAyLWY0ZDAtNGZlNC05NTI5LTViZmQ4MjNmOTdmOCIsImp0aSI6IjExNTY4ZWIyLWVlMDQtNGRkNi05M2MwLWZmZWQ5Mjc4MDJmNCIsImlhdCI6IjE2Mzg5MDk0ODMyNTciLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsiY29uZmVyZW5jZXMiLCJob3N0cyIsInRpY2tldHMiLCJ1c2VycyJdLCJuYmYiOjE2Mzg5MDk0ODMsImV4cCI6MTYzODk0NTQ4MywiaXNzIjoiY29uZmFiIn0.cp9fsfoV3Ubaoce5pt9rag1UlGsmqkp8vA10PkvAO6Q
 ###
 GET {{url}}
 
 ###
 POST {{url}}/speakers
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
