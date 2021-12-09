@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Confab.Modules.Speakers.Core.Entities;
+﻿using Confab.Modules.Speakers.Core.Entities;
 using Confab.Modules.Speakers.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 

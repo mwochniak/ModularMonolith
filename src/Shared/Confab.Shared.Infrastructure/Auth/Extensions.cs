@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Confab.Shared.Abstractions.Auth;
 using Confab.Shared.Abstractions.Modules;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

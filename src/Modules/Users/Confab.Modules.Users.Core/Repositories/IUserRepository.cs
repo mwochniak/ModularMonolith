@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Confab.Modules.Users.Core.Entities;
+﻿using Confab.Modules.Users.Core.Entities;
 
 namespace Confab.Modules.Users.Core.Repositories
 {

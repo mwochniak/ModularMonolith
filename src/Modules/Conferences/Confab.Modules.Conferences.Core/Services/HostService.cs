@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Confab.Modules.Conferences.Core.DTO;
+﻿using Confab.Modules.Conferences.Core.DTO;
 using Confab.Modules.Conferences.Core.Entities;
 using Confab.Modules.Conferences.Core.Exceptions;
 using Confab.Modules.Conferences.Core.Policies;

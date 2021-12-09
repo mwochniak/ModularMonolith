@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Confab.Shared.Abstractions.Exceptions
+﻿namespace Confab.Shared.Abstractions.Exceptions
 {
     public abstract class ConfabException : Exception
     {

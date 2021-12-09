@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Confab.Modules.Speakers.Core.DTO;
+﻿using Confab.Modules.Speakers.Core.DTO;
 using Confab.Modules.Speakers.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

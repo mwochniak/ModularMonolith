@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Confab.Modules.Conferences.Core.DTO;
+﻿using Confab.Modules.Conferences.Core.DTO;
 
 namespace Confab.Modules.Conferences.Core.Services
 {

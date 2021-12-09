@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Confab.Modules.Speakers.Core.Entities
+﻿namespace Confab.Modules.Speakers.Core.Entities
 {
     public class Speaker
     {

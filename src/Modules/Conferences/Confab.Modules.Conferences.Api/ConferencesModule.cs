@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Confab.Modules.Conferences.Core;
+﻿using Confab.Modules.Conferences.Core;
 using Confab.Shared.Abstractions.Modules;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;

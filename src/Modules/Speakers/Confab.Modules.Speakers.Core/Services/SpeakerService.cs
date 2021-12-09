@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Confab.Modules.Speakers.Core.DTO;
+﻿using Confab.Modules.Speakers.Core.DTO;
 using Confab.Modules.Speakers.Core.Exceptions;
 using Confab.Modules.Speakers.Core.Repositories;
 using Confab.Modules.Speakers.Core.Mappings;

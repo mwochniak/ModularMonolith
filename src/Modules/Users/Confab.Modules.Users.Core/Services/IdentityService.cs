@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Confab.Modules.Users.Core.DTO;
+﻿using Confab.Modules.Users.Core.DTO;
 using Confab.Modules.Users.Core.Entities;
 using Confab.Modules.Users.Core.Exceptions;
 using Confab.Modules.Users.Core.Repositories;

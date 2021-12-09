@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Confab.Shared.Infrastructure.Auth
+﻿namespace Confab.Shared.Infrastructure.Auth
 {
     public class AuthOptions
     {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Net;
 using Confab.Shared.Abstractions.Exceptions;
 using Humanizer;

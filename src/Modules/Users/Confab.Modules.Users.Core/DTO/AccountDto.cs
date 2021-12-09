@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Confab.Modules.Users.Core.DTO
+﻿namespace Confab.Modules.Users.Core.DTO
 {
     public class AccountDto
     {

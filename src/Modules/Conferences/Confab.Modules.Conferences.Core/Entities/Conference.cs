@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Confab.Modules.Conferences.Core.Entities
+﻿namespace Confab.Modules.Conferences.Core.Entities
 {
     public class Conference
     {

@@ -1,26 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
+using Confab.Shared.Abstractions.Contexts;
 using Confab.Shared.Abstractions.Modules;
 using Confab.Shared.Abstractions.Time;
 using Confab.Shared.Infrastructure.Api;
 using Confab.Shared.Infrastructure.Auth;
+using Confab.Shared.Infrastructure.Contexts;
 using Confab.Shared.Infrastructure.Exceptions;
+using Confab.Shared.Infrastructure.Modules;
 using Confab.Shared.Infrastructure.Postgres;
 using Confab.Shared.Infrastructure.Services;
 using Confab.Shared.Infrastructure.Time;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 
 [assembly: InternalsVisibleTo("Confab.Bootstrapper")]
 namespace Confab.Shared.Infrastructure
 {
     internal static class Extensions
     {
+        private const string CorsPolicy = "cors";
+        
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,
             IList<Assembly> assemblies, IList<IModule> modules)
         {
@@ -41,7 +45,30 @@ namespace Confab.Shared.Infrastructure
                     }
                 }
             }
-            
+
+            services.AddCors(cors =>
+            {
+                cors.AddPolicy(CorsPolicy, x =>
+                {
+                    x.WithOrigins("*")
+                        .WithMethods("POST", "PUT", "DELETE")
+                        .WithHeaders("Content-Type", "Authorization");
+                });
+            });
+            services.AddSwaggerGen(swagger =>
+            {
+                swagger.CustomSchemaIds(x => x.FullName);
+                swagger.SwaggerDoc("v1", new OpenApiInfo()
+                {
+                    Title = "Confab API",
+                    Version = "v1"
+                });
+            });
+
+            services.AddSingleton<IContextFactory, ContextFactory>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IContext>(sp => sp.GetRequiredService<IContextFactory>().Create());
+            services.AddModuleInfo(modules);
             services.AddAuth(modules);
             services.AddErrorHandling();
             services.AddPostgres();
@@ -70,7 +97,15 @@ namespace Confab.Shared.Infrastructure
 
         public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
         {
+            app.UseCors(CorsPolicy);
             app.UseErrorHandling();
+            app.UseSwagger();
+            app.UseReDoc(reDoc =>
+            {
+                reDoc.RoutePrefix = "docs";
+                reDoc.SpecUrl("/swagger/v1/swagger.json");
+                reDoc.DocumentTitle = "Confab API";
+            });
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
@@ -85,7 +120,7 @@ namespace Confab.Shared.Infrastructure
             return configuration.GetOptions<T>(sectionName);
         }
 
-        public static T GetOptions<T>(this IConfiguration configuration, string sectionName) where T : new()
+        private static T GetOptions<T>(this IConfiguration configuration, string sectionName) where T : new()
         {
             var options = new T();
             configuration.GetSection(sectionName).Bind(options);

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Confab.Shared.Abstractions.Auth
+﻿namespace Confab.Shared.Abstractions.Auth
 {
     public class JsonWebToken
     {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Confab.Modules.Users.Core.Entities
+﻿namespace Confab.Modules.Users.Core.Entities
 {
     public class User
     {

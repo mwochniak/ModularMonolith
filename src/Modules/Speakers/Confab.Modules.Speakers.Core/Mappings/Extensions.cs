@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Confab.Modules.Speakers.Core.DTO;
+﻿using Confab.Modules.Speakers.Core.DTO;
 using Confab.Modules.Speakers.Core.Entities;
 
 namespace Confab.Modules.Speakers.Core.Mappings
