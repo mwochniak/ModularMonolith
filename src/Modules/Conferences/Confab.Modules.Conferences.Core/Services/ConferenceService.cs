@@ -1,8 +1,10 @@
 ﻿using Confab.Modules.Conferences.Core.DTO;
 using Confab.Modules.Conferences.Core.Entities;
+using Confab.Modules.Conferences.Core.Events;
 using Confab.Modules.Conferences.Core.Exceptions;
 using Confab.Modules.Conferences.Core.Policies;
 using Confab.Modules.Conferences.Core.Repositories;
+using Confab.Shared.Abstractions.Messaging;
 
 namespace Confab.Modules.Conferences.Core.Services
 {
@@ -11,32 +13,41 @@ namespace Confab.Modules.Conferences.Core.Services
         private readonly IConferenceRepository _conferenceRepository;
         private readonly IHostRepository _hostRepository;
         private readonly IConferenceDeletionPolicy _conferenceDeletionPolicy;
+        private readonly IMessageBroker _messageBroker;
 
         public ConferenceService(IConferenceRepository conferenceRepository, IHostRepository hostRepository,
-            IConferenceDeletionPolicy conferenceDeletionPolicy)
+            IConferenceDeletionPolicy conferenceDeletionPolicy, IMessageBroker messageBroker)
         {
             _conferenceRepository = conferenceRepository;
             _hostRepository = hostRepository;
             _conferenceDeletionPolicy = conferenceDeletionPolicy;
+            _messageBroker = messageBroker;
         }
 
         public async Task CreateAsync(ConferenceDetailsDto dto)
         {
             if (await _hostRepository.GetAsync(dto.HostId) is null)
+            {
                 throw new HostNotFoundException(dto.Id);
+            }
 
             dto.Id = Guid.NewGuid();
-            await _conferenceRepository.CreateAsync(new Conference
+            var conference = new Conference
             {
                 Id = dto.Id,
                 HostId = dto.HostId,
-                From = new DateTime(dto.From.Year, dto.From.Month, dto.From.Day, dto.From.Minute, dto.From.Second, dto.From.Millisecond, DateTimeKind.Utc),
-                To = new DateTime(dto.To.Year, dto.To.Month, dto.To.Day, dto.To.Minute, dto.To.Second, dto.To.Millisecond, DateTimeKind.Utc),
+                From = new DateTime(dto.From.Year, dto.From.Month, dto.From.Day, dto.From.Minute, dto.From.Second,
+                    dto.From.Millisecond, DateTimeKind.Utc),
+                To = new DateTime(dto.To.Year, dto.To.Month, dto.To.Day, dto.To.Minute, dto.To.Second,
+                    dto.To.Millisecond, DateTimeKind.Utc),
                 Location = dto.Location,
                 Name = dto.Name,
                 LogoUrl = dto.LogoUrl,
                 ParticipantsLimit = dto.ParticipantsLimit
-            });
+            };
+            await _conferenceRepository.CreateAsync(conference);
+            await _messageBroker.PublishAsync(new ConferenceCreated(conference.Id, conference.Name,
+                conference.ParticipantsLimit, conference.From, conference.To));
         }
 
         public async Task<ConferenceDetailsDto> GetAsync(Guid id)
@@ -44,7 +55,9 @@ namespace Confab.Modules.Conferences.Core.Services
             var conference = await _conferenceRepository.GetAsync(id);
 
             if (conference is null)
+            {
                 return null;
+            }
 
             var dto = Map<ConferenceDetailsDto>(conference);
             dto.Description = conference.Description;
@@ -63,7 +76,9 @@ namespace Confab.Modules.Conferences.Core.Services
             var conference = await _conferenceRepository.GetAsync(dto.Id);
 
             if (conference is null)
+            {
                 throw new ConferenceNotFoundException(dto.Id);
+            }
 
             conference.Name = dto.Name;
             conference.Description = dto.Description;
@@ -82,10 +97,14 @@ namespace Confab.Modules.Conferences.Core.Services
             var conference = await _conferenceRepository.GetAsync(id);
 
             if (conference is null)
+            {
                 throw new ConferenceNotFoundException(id);
+            }
 
             if (await _conferenceDeletionPolicy.CanDeleteAsync(conference) is false)
+            {
                 throw new CannotDeleteConferenceException(id);
+            }
 
             await _conferenceRepository.DeleteAsync(conference);
         }

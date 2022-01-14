@@ -6,7 +6,9 @@ using Confab.Shared.Abstractions.Time;
 using Confab.Shared.Infrastructure.Api;
 using Confab.Shared.Infrastructure.Auth;
 using Confab.Shared.Infrastructure.Contexts;
+using Confab.Shared.Infrastructure.Events;
 using Confab.Shared.Infrastructure.Exceptions;
+using Confab.Shared.Infrastructure.Messaging;
 using Confab.Shared.Infrastructure.Modules;
 using Confab.Shared.Infrastructure.Postgres;
 using Confab.Shared.Infrastructure.Services;
@@ -67,10 +69,13 @@ namespace Confab.Shared.Infrastructure
 
             services.AddSingleton<IContextFactory, ContextFactory>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IContext>(sp => sp.GetRequiredService<IContextFactory>().Create());
+            services.AddTransient(sp => sp.GetRequiredService<IContextFactory>().Create());
             services.AddModuleInfo(modules);
+            services.AddModuleRequest(assemblies);
             services.AddAuth(modules);
             services.AddErrorHandling();
+            services.AddEvents(assemblies);
+            services.AddMessaging();
             services.AddPostgres();
             services.AddSingleton<IClock, UtcClock>();
             services.AddHostedService<AppInitializer>();
