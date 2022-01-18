@@ -1,15 +1,22 @@
-﻿using Confab.Shared.Abstractions.Messaging;
+﻿using System.Runtime.CompilerServices;
+using Confab.Shared.Abstractions.Messaging;
 using Confab.Shared.Abstractions.Modules;
+using Confab.Shared.Infrastructure.Messaging.Dispatchers;
 
 namespace Confab.Shared.Infrastructure.Messaging.Brokers;
 
 internal sealed class InMemoryMessageBroker : IMessageBroker
 {
     private readonly IModuleClient _moduleClient;
+    private readonly IAsyncMessageDispatcher _asyncMessageDispatcher;
+    private readonly MessagingOptions _messagingOptions;
 
-    public InMemoryMessageBroker(IModuleClient moduleClient)
+    public InMemoryMessageBroker(IModuleClient moduleClient,
+        MessagingOptions messagingOptions, IAsyncMessageDispatcher asyncMessageDispatcher)
     {
         _moduleClient = moduleClient;
+        _messagingOptions = messagingOptions;
+        _asyncMessageDispatcher = asyncMessageDispatcher;
     }
     
     public async Task PublishAsync(params IMessage[] messages)
@@ -30,6 +37,12 @@ internal sealed class InMemoryMessageBroker : IMessageBroker
         
         foreach (var message in messages)
         {
+            if (_messagingOptions.UseBackgroundDispatcher)
+            {
+                await _asyncMessageDispatcher.PublishAsync(message);
+                continue;
+            }
+            
             tasks.Add(_moduleClient.PublishAsync(message));
         }
 
