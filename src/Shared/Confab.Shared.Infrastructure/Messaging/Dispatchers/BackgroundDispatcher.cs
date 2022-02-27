@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata;
-using Confab.Shared.Abstractions.Modules;
+﻿using Confab.Shared.Abstractions.Modules;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 

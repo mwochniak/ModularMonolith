@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Confab.Shared.Abstractions.Messaging;
+﻿using Confab.Shared.Abstractions.Messaging;
 using Confab.Shared.Abstractions.Modules;
 using Confab.Shared.Infrastructure.Messaging.Dispatchers;
 
