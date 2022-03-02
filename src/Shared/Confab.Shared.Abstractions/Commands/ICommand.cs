@@ -3,6 +3,6 @@
 namespace Confab.Shared.Abstractions.Commands;
 
 // Marker
-public interface ICommand : IMessageBroker
+public interface ICommand : IMessage
 {
 }

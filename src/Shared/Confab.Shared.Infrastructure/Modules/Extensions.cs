@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Confab.Shared.Abstractions.Commands;
 using Confab.Shared.Abstractions.Events;
 using Confab.Shared.Abstractions.Modules;
 using Microsoft.AspNetCore.Builder;
@@ -8,9 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Confab.Shared.Infrastructure.Modules
-{
-    public static class Extensions
+namespace Confab.Shared.Infrastructure.Modules;
+
+public static class Extensions
     {
         internal static IServiceCollection AddModuleInfo(this IServiceCollection services, IList<IModule> modules)
         {
@@ -32,49 +33,68 @@ namespace Confab.Shared.Infrastructure.Modules
                 return context.Response.WriteAsJsonAsync(moduleInfoProvider.Modules);
             });
         }
-
+        
         internal static IHostBuilder ConfigureModules(this IHostBuilder builder)
             => builder.ConfigureAppConfiguration((ctx, cfg) =>
             {
-                foreach (var setting in GetSettings("*"))
+                foreach (var settings in GetSettings("*"))
                 {
-                    cfg.AddJsonFile(setting);
+                    cfg.AddJsonFile(settings);
                 }
 
-                foreach (var setting in GetSettings($"*.{ctx.HostingEnvironment.EnvironmentName}"))
+                foreach (var settings in GetSettings($"*.{ctx.HostingEnvironment.EnvironmentName}"))
                 {
-                    cfg.AddJsonFile(setting);
+                    cfg.AddJsonFile(settings);
                 }
 
                 IEnumerable<string> GetSettings(string pattern)
                     => Directory.EnumerateFiles(ctx.HostingEnvironment.ContentRootPath,
                         $"module.{pattern}.json", SearchOption.AllDirectories);
             });
-
-        internal static IServiceCollection AddModuleRequest(this IServiceCollection services,
+        
+        internal static IServiceCollection AddModuleRequests(this IServiceCollection services,
             IList<Assembly> assemblies)
         {
             services.AddModuleRegistry(assemblies);
             services.AddSingleton<IModuleClient, ModuleClient>();
             services.AddSingleton<IModuleSerializer, JsonModuleSerializer>();
+            services.AddSingleton<IModuleSubscriber, ModuleSubscriber>();
 
             return services;
         }
 
+        public static IModuleSubscriber UseModuleRequests(this IApplicationBuilder app)
+            => app.ApplicationServices.GetRequiredService<IModuleSubscriber>();
+
         private static void AddModuleRegistry(this IServiceCollection services, IEnumerable<Assembly> assemblies)
         {
             var registry = new ModuleRegistry();
-            var types = assemblies.SelectMany(x => x.GetTypes())
+            var types = assemblies.SelectMany(x => x.GetTypes()).ToArray();
+            
+            var commandTypes = types
+                .Where(t => t.IsClass && typeof(ICommand).IsAssignableFrom(t))
                 .ToArray();
             
             var eventTypes = types
-                .Where(x => x.IsClass && typeof(IEvent).IsAssignableFrom(x)).ToArray();
+                .Where(x => x.IsClass && typeof(IEvent).IsAssignableFrom(x))
+                .ToArray();
 
             services.AddSingleton<IModuleRegistry>(sp =>
             {
+                var commandDispatcher = sp.GetRequiredService<ICommandDispatcher>();
+                var commandDispatcherType = commandDispatcher.GetType();
+                
                 var eventDispatcher = sp.GetRequiredService<IEventDispatcher>();
                 var eventDispatcherType = eventDispatcher.GetType();
 
+                foreach (var type in commandTypes)
+                {
+                    registry.AddBroadcastAction(type, @event =>
+                        (Task) commandDispatcherType.GetMethod(nameof(commandDispatcher.SendAsync))
+                            ?.MakeGenericMethod(type)
+                            .Invoke(commandDispatcher, new[] {@event}));
+                }
+                
                 foreach (var type in eventTypes)
                 {
                     registry.AddBroadcastAction(type, @event =>
@@ -87,4 +107,3 @@ namespace Confab.Shared.Infrastructure.Modules
             });
         }
     }
-}
