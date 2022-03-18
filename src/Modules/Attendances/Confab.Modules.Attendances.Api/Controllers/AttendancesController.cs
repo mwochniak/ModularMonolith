@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Confab.Modules.Attendances.Application.Commands;
+﻿using Confab.Modules.Attendances.Application.Commands;
 using Confab.Modules.Attendances.Application.DTO;
 using Confab.Modules.Attendances.Application.Queries;
 using Confab.Shared.Abstractions.Commands;

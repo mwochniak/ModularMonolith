@@ -21,5 +21,9 @@ public class Speaker : AggregateRoot
         _agendaItems = new List<AgendaItem>(agendaItems ?? Enumerable.Empty<AgendaItem>());
     }
 
+    private Speaker()
+    {
+    }
+
     public static Speaker Create(Guid id, string fullName) => new(id, fullName);
 }

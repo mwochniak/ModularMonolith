@@ -10,7 +10,7 @@ namespace Confab.Modules.Attendances.Api;
 internal class AttendancesModule : IModule
 {
     public const string BasePath = "attendances-module";        
-    public string Name { get; } = "Attendances";
+    public string Name => "Attendances";
     public string Path => BasePath;
 
     public void Register(IServiceCollection services)

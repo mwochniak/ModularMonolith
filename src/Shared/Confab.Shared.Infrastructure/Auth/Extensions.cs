@@ -10,7 +10,7 @@ namespace Confab.Shared.Infrastructure.Auth;
 
 public static class Extensions
 {
-    public static IServiceCollection AddAuth(this IServiceCollection services, IList<IModule> modules = null,
+    internal static IServiceCollection AddAuth(this IServiceCollection services, IList<IModule> modules = null,
         Action<JwtBearerOptions> optionsFactory = null)
     {
         var options = services.GetOptions<AuthOptions>("auth");

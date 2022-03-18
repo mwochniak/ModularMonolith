@@ -27,6 +27,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
 [assembly: InternalsVisibleTo("Confab.Bootstrapper")]
+[assembly: InternalsVisibleTo("Confab.Shared.Tests")]
+[assembly: InternalsVisibleTo("Confab.Services.Tickets.Core")]
 namespace Confab.Shared.Infrastructure;
 
 internal static class Extensions

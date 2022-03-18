@@ -1,5 +1,4 @@
 ﻿using Confab.Modules.Agendas.Application.CallForPapers.Exceptions;
-using Confab.Modules.Agendas.Application.Submissions.Exceptions;
 using Confab.Modules.Agendas.Application.Submissions.Services;
 using Confab.Modules.Agendas.Domain.CallForPapers.Repositories;
 using Confab.Modules.Agendas.Domain.Submissions.Entities;

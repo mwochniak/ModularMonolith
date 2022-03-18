@@ -2,6 +2,8 @@
 using Confab.Shared.Abstractions.Modules;
 using Confab.Shared.Infrastructure;
 using Confab.Shared.Infrastructure.Modules;
+using Convey;
+using Convey.MessageBrokers.RabbitMQ;
 
 namespace Confab.Bootstrapper
 {
@@ -41,6 +43,9 @@ namespace Confab.Bootstrapper
                 endpoints.MapGet("/", context => context.Response.WriteAsync("Confab API!"));
                 endpoints.MapModuleInfo();
             });
+
+            app.UseConvey();
+            app.UseRabbitMq();
 
             _assemblies.Clear();
             _modules.Clear();
